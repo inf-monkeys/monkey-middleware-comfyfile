@@ -8,19 +8,34 @@ import redis
 from config import load_config
 from ..models.task import TaskStatus
 from .instance_service import InstanceService
+import logging
+import httpx
+from utils.redis_client import RedisClient
+
+logger = logging.getLogger(__name__)
 
 class TaskService:
     def __init__(self, instance_service: InstanceService):
         self.instance_service = instance_service
         self.config = load_config()
-        self.redis_client = redis.Redis(
-            host=self.config["redis"]["host"],
-            port=self.config["redis"]["port"],
-            password=self.config["redis"]["password"],
-            db=self.config["redis"]["db"]
-        )
+        self.redis_client = RedisClient.get_instance().get_client()
+        self.tasks: Dict[str, Task] = {}
         self._start_queue_processor()
         self._start_result_listener()
+        
+        # HTTP 客户端配置
+        self.http_client = httpx.Client(
+            timeout=httpx.Timeout(
+                connect=30.0,  # 连接超时
+                read=7200.0,   # 读取超时（2小时）
+                write=30.0,    # 写入超时
+                pool=30.0      # 连接池超时
+            ),
+            limits=httpx.Limits(
+                max_keepalive_connections=5,
+                max_connections=10
+            )
+        )
 
     def _start_result_listener(self):
         """启动结果监听线程"""
