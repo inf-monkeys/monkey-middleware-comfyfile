@@ -51,7 +51,14 @@ src/middleware/
 ├── models/            # 模型层
 │   ├── task.py              # 任务相关模型
 │   └── instance.py          # 实例相关模型
-└── main.py           # 主应用入口
+├── middleware/        # 中间件层
+│   └── security.py          # 安全认证中间件
+├── config/           # 配置层
+│   └── logging_config.py    # 日志配置
+├── config.py         # 配置文件读取
+├── main.py          # 主应用入口
+├── run_prod.py     # 生产环境启动脚本
+└── run_debug.py     # 开发环境启动脚本
 ```
 
 ## 接口说明
