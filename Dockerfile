@@ -37,4 +37,4 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
 
 # 启动命令
-CMD ["python", "src/middleware/run_debug.py"] 
+CMD ["python", "run_prod.py"] 
