@@ -1,0 +1,7 @@
+fastapi==0.68.1
+uvicorn==0.15.0
+requests==2.26.0
+python-multipart==0.0.6
+setuptools>=65.5.0
+redis==4.5.5
+pyyaml==6.0.1 

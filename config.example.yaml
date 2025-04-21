@@ -1,0 +1,17 @@
+comfyfile_instances:
+- token: your-token-here
+  url: http://example.com:port
+health_check:
+  interval: 120
+  timeout: 5
+logging:
+  debug: false
+  retention_days: 7
+  rotation_interval: 1
+redis:
+  db: 0
+  host: localhost
+  password: your-redis-password
+  port: 6379
+security:
+  secret: your-secret-key-here
