@@ -9,10 +9,12 @@ class SecurityMiddleware:
     def __init__(self, app: ASGIApp):
         self.app = app
         self.config = load_config()
-        self.secret = self.config["security"]["secret"]
-        # 同时支持 Bearer token 和 query 两种方式
-        self.header_key = APIKeyHeader(name="Authorization")
-        self.query_key = APIKeyQuery(name="api_key")
+        self.enabled = self.config["security"]["enabled"]
+        if self.enabled:
+            self.secret = self.config["security"]["secret"]
+            # 同时支持 Bearer token 和 query 两种方式
+            self.header_key = APIKeyHeader(name="Authorization")
+            self.query_key = APIKeyQuery(name="api_key")
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         """
@@ -24,6 +26,10 @@ class SecurityMiddleware:
             send: ASGI send
         """
         if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+
+        # 如果未启用鉴权，直接继续处理请求
+        if not self.enabled:
             return await self.app(scope, receive, send)
 
         request = Request(scope)
