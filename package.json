@@ -1,0 +1,39 @@
+{
+  "name": "monkey-middleware-comfyfile",
+  "version": "0.0.3",
+  "description": "",
+  "scripts": {
+    "dev": "nodemon",
+    "dev:win": "chcp 65001 && nodemon",
+    "start": "tsx src/index.ts",
+    "start:win": "chcp 65001 && tsx src/index.ts",
+    "build": "tsc",
+    "prod": "node dist/index.js",
+    "prod:win": "chcp 65001 && node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.17.16",
+    "axios": "^1.8.4",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "ioredis": "^5.6.1",
+    "lodash": "^4.17.21",
+    "nanoid": "^5.1.5",
+    "pino": "^9.6.0",
+    "yaml": "^2.7.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "nodemon": "^3.1.9",
+    "pino-pretty": "^13.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.8.1",
+  "type": "module"
+}
