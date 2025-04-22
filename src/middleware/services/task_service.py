@@ -10,7 +10,7 @@ from ..models.task import TaskStatus
 from .instance_service import InstanceService
 import logging
 import httpx
-from utils.redis_client import RedisClient
+from ..utils.redis_client import RedisClient
 
 logger = logging.getLogger(__name__)
 
