@@ -1,4 +1,4 @@
-import { Router, json } from "express";
+import { Router } from "express";
 
 import { runWorkflow } from './services/task.js';
 import { getAllInstances } from "./services/instance.js";
@@ -6,7 +6,7 @@ import _ from "lodash";
 
 const router = Router();
 
-router.post('/run', json({ limit: '20mb' }), async (req, res) => {
+router.post('/run', async (req, res) => {
   try {
     const params = req.body;
     const result = await runWorkflow(params);

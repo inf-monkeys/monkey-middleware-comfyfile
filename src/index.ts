@@ -14,7 +14,7 @@ const app = express();
 
 const port = config.server?.port || 8000;
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // 创建 logger 实例
 const logger = createLogger('app');
@@ -22,7 +22,7 @@ const logger = createLogger('app');
 app.get("/", (_, res) => {
   res.send({
     app: "monkey-middleware-comfyfile",
-    version: "0.0.5",
+    version: "0.0.5-fixed",
     description: "Comfyfile 的任务队列管理中间件",
   });
 });
