@@ -10,10 +10,7 @@ router.post('/run', json({ limit: '20mb' }), async (req, res) => {
   try {
     const params = req.body;
     const result = await runWorkflow(params);
-    res.json({
-      success: true,
-      data: result
-    });
+    res.json(result);
   } catch (error) {
     res.status(500).json({
       success: false,

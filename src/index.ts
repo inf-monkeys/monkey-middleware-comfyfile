@@ -22,7 +22,7 @@ const logger = createLogger('app');
 app.get("/", (_, res) => {
   res.send({
     app: "monkey-middleware-comfyfile",
-    version: "0.0.4",
+    version: "0.0.5",
     description: "Comfyfile 的任务队列管理中间件",
   });
 });
