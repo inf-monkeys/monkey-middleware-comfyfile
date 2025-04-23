@@ -3,6 +3,7 @@ import { getAvailableInstance, setInstanceBusy } from './instance.js';
 import redis from '../utils/redis.js';
 import { nanoid } from 'nanoid';
 import { createLogger } from '../utils/logger.js';
+import { ComfyfileTaskResult } from '../typings/ComfyfileTask.js';
 
 // 创建 logger 实例
 const logger = createLogger('task-service');
@@ -30,7 +31,7 @@ interface WorkflowTask {
 }
 
 // 推送工作流任务到队列
-export async function pushWorkflowTask(params: any): Promise<string> {
+export async function pushWorkflowTask(params: string): Promise<string> {
   const taskId = nanoid();
   const task: WorkflowTask = {
     id: taskId,
@@ -62,7 +63,7 @@ export async function getTaskStatus(taskId: string): Promise<WorkflowTask | null
 }
 
 // 更新任务状态并发布结果
-async function updateTaskStatus(taskId: string, status: TaskStatus, data?: any): Promise<void> {
+async function updateTaskStatus(taskId: string, status: TaskStatus, data?: ComfyfileTaskResult): Promise<void> {
   const taskJson = await redis.get(`comfyfile:task:${taskId}`);
   if (!taskJson) return;
   
@@ -86,8 +87,8 @@ async function updateTaskStatus(taskId: string, status: TaskStatus, data?: any):
   }
 }
 
-// 运行工作流 - 修复版本
-export async function runWorkflow(params: any): Promise<any> {
+// 运行工作流
+export async function runWorkflow(params: string): Promise<ComfyfileTaskResult> {
   return new Promise(async (resolve, reject) => {
     // 先获取任务ID，确保它是一个确定的值
     const taskId = await pushWorkflowTask(params);
