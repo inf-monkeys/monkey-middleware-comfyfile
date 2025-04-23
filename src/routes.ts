@@ -1,16 +1,12 @@
-import { Router } from "express";
+import { Router, json } from "express";
 
 import { runWorkflow } from './services/task.js';
 import { getAllInstances } from "./services/instance.js";
 import _ from "lodash";
-import { createLogger } from './utils/logger.js';
 
 const router = Router();
 
-// 创建 logger 实例
-const logger = createLogger('routes');
-
-router.post('/run', async (req, res) => {
+router.post('/run', json({ limit: '20mb' }), async (req, res) => {
   try {
     const params = req.body;
     const result = await runWorkflow(params);
