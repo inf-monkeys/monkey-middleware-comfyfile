@@ -1,6 +1,6 @@
 {
   "name": "monkey-middleware-comfyfile",
-  "version": "0.0.5-fixed",
+  "version": "0.0.7",
   "description": "",
   "scripts": {
     "dev": "nodemon",

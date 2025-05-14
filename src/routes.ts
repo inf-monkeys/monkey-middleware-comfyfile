@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { cancelWorkflow, runWorkflow } from './services/task.js';
+import { cancelAllWorkflows, cancelWorkflow, runWorkflow } from './services/task.js';
 import { getAllInstances } from "./services/instance.js";
 import _ from "lodash";
 import { nanoid } from "nanoid";
@@ -29,6 +29,35 @@ router.get('/instances', (_req, res) => {
     success: true,
     data: getAllInstances().map(instance => _.pick(instance, ['url', 'healthz', 'lastCheck', 'busy']))
   });
+});
+
+router.delete('/task/:taskId', async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+    await cancelWorkflow(taskId);
+    res.json({
+      success: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+});
+
+router.delete('/task/all', async (req, res) => {
+  try {
+    await cancelAllWorkflows();
+    res.json({
+      success: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
 });
 
 export default router;

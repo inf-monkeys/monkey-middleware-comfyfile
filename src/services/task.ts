@@ -162,6 +162,13 @@ export async function cancelWorkflow(taskId: string): Promise<void> {
   }
 }
 
+// 取消所有工作流
+export async function cancelAllWorkflows(): Promise<void> {
+  const tasks = await getAllTasks();
+  for (const task of tasks) {
+    await cancelWorkflow(task.id);
+  }
+}
 // 处理下一个任务
 export async function processNextTask() {
   try {
