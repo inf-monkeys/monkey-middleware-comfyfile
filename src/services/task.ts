@@ -146,7 +146,7 @@ export async function runWorkflow(params: string): Promise<ComfyfileTaskResult> 
 
 // 处理下一个任务
 export async function processNextTask() {
-  while (true) {
+  try {
     // 检查是否有可用实例
     const instance = getAvailableInstance();
     if (!instance) {
@@ -180,13 +180,22 @@ export async function processNextTask() {
       } finally {
         // 标记实例为可用状态
         setInstanceBusy(instance, false);
+        
+        // 继续处理下一个任务
+        processNextTask();
       }
     } catch (error) {
       logger.error('处理任务时出错:', error);
       if (instance) {
         setInstanceBusy(instance, false);
       }
+      // 继续处理下一个任务
+      processNextTask();
     }
+  } catch (error) {
+    logger.error('处理任务队列时出错:', error);
+    // 出错时也继续尝试处理
+    processNextTask();
   }
 }
 
@@ -215,8 +224,21 @@ async function executeTask(task: WorkflowTask, instance: ComfyfileInstance): Pro
 
 // 启动任务处理器 - 改进版本
 export function startTaskProcessor() {
-  // 不再需要定期轮询，直接启动处理
+  // 启动处理
   processNextTask();
+  
+  // 添加定期检查，确保任务队列不会卡住
+  setInterval(() => {
+    redis.llen(TASK_QUEUE).then(length => {
+      if (length > 0) {
+        logger.info(`检测到队列中有 ${length} 个待处理任务，尝试处理`);
+        processNextTask();
+      }
+    }).catch(err => {
+      logger.error('检查任务队列长度时出错:', err);
+    });
+  }, 30000); // 每30秒检查一次
+  
   logger.info('ComfyFile 任务处理器已启动');
 }
 
