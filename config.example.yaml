@@ -9,10 +9,20 @@ logging:
   retention_days: 7
   rotation_interval: 1
 redis:
+  # 普通模式配置
+  host: 127.0.0.1
+  port: 36379
+  password: OyugFqUT4G5NiiiH
   db: 0
-  host: localhost
-  password: your-redis-password
-  port: 6379
+  
+  # sentinel模式配置
+  sentinel:
+    enabled: false
+    master: mymaster
+    password: sentinel-password
+    nodes:
+      - host: 127.0.0.1
+        port: 26379
 security:
   enabled: true
   secret: your-secret-key-here

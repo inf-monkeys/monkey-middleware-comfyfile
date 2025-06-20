@@ -20,6 +20,15 @@ interface Config {
     port: number;
     password: string;
     db: number;
+    sentinel?: {
+      enabled: boolean;
+      master: string;
+      password?: string;
+      nodes: {
+        host: string;
+        port: number;
+      }[];
+    };
   };
   security?: {
     enabled?: boolean;
