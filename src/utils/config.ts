@@ -16,6 +16,7 @@ interface Config {
     rotation_interval: number;
   };
   redis: {
+    username?: string;
     host: string;
     port: number;
     password: string;
